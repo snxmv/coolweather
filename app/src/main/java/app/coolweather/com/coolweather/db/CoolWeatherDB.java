@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CoolWeatherDB {
             ContentValues values = new ContentValues();
             values.put("province_name", province.getProvinceName());
             values.put("province_code", province.getProvinceCode());
+//            Log.e("shaonian2", values.toString());
             db.insert("Province",null,values);
         }
     }
@@ -63,7 +65,7 @@ public class CoolWeatherDB {
     public List<Province> loadProvinces(){
         List<Province> list = new ArrayList<>();
         Cursor cursor = db.query("Province", null, null, null, null, null, null);
-        while (cursor.moveToFirst()){
+        while (cursor.moveToNext()){
             Province province = new Province();
             province.setId(cursor.getInt(cursor.getColumnIndex("id")));
             province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
@@ -98,7 +100,7 @@ public class CoolWeatherDB {
     public List<City> loadCitys(){
         List<City> list = new ArrayList<>();
         Cursor cursor = db.query("City", null, null, null, null, null, null);
-        while (cursor.moveToFirst()){
+        while (cursor.moveToNext()){
             City city = new City();
             city.setId(cursor.getInt(cursor.getColumnIndex("id")));
             city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
@@ -134,7 +136,7 @@ public class CoolWeatherDB {
     public List<County> loadCountys(){
         List<County> list = new ArrayList<>();
         Cursor cursor = db.query("County", null, null, null, null, null, null);
-        while (cursor.moveToFirst()){
+        while (cursor.moveToNext()){
             County county = new County();
             county.setId(cursor.getInt(cursor.getColumnIndex("id")));
             county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
