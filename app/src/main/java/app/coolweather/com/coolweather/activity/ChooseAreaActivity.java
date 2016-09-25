@@ -2,7 +2,10 @@ package app.coolweather.com.coolweather.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,9 +54,20 @@ public class ChooseAreaActivity extends Activity{
 
     private int currentLevel;
 
+    private boolean isFromWeatherActivity;//是否是从WeatherActivity返回
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
+        if(preferences.getBoolean("city_selected", false) && !isFromWeatherActivity){
+            Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         setContentView(R.layout.choose_area);
 
         listView = (ListView)findViewById(R.id.list_view);
@@ -67,10 +81,16 @@ public class ChooseAreaActivity extends Activity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(currentLevel == LEVEL_PROVINCE){
                     selectedProvince = provinceList.get(position);
-                    queryCities();
+                    queryCities(selectedProvince.getId());
                 }else if(currentLevel == LEVEL_CITY){
                     selectedCity = cityList.get(position);
-                    queryCounties();
+                    queryCounties(selectedCity.getId());
+                }else if(currentLevel == LEVEL_COUNTY){
+                    String countyCode = countyList.get(position).getCountyCode();
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    intent.putExtra("county_code", countyCode);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -95,8 +115,8 @@ public class ChooseAreaActivity extends Activity{
             queryFromServer(null, "province");
         }
     }
-    private void queryCities(){
-        cityList = coolWeatherDB.loadCitys();
+    private void queryCities(int provinceId){
+        cityList = coolWeatherDB.loadCitys(provinceId);
         if(cityList.size() > 0){
             datalist.clear();
             for(City city : cityList){
@@ -110,8 +130,8 @@ public class ChooseAreaActivity extends Activity{
             queryFromServer(selectedProvince.getProvinceCode(),"city");
         }
     }
-    private void queryCounties(){
-        countyList = coolWeatherDB.loadCountys();
+    private void queryCounties(int cityId){
+        countyList = coolWeatherDB.loadCountys(cityId);
         if(countyList.size() > 0){
             datalist.clear();
             for(County county : countyList){
@@ -158,9 +178,9 @@ public class ChooseAreaActivity extends Activity{
                             if("province".equals(type)){
                                 queryProvinces();
                             }else if("city".equals(type)){
-                                queryCities();
+                                queryCities(selectedProvince.getId());
                             }else if("county".equals(type)){
-                                queryCounties();
+                                queryCounties(selectedCity.getId());
                             }
                         }
                     });
@@ -212,8 +232,10 @@ public class ChooseAreaActivity extends Activity{
             finish();
         }else if(currentLevel == LEVEL_CITY){
             queryProvinces();
+        }else if(currentLevel == LEVEL_COUNTY){
+            queryCities(selectedProvince.getId());
         }else{
-            queryCities();
+            queryCounties(selectedCity.getId());
         }
     }
 }
