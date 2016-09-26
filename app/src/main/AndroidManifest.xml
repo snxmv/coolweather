@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.coolweather.com.coolweather"
+    package="com.coolweather.love.shaonianAndxmv"
     android:versionName="1.0.1"
     android:revisionCode="1">
 
@@ -19,16 +19,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activity.ChooseAreaActivity">
+        <activity android:name="shixiaofei.coolweather.love.shaonianAndxmv.activity.ChooseAreaActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.WeatherActivity"></activity>
+        <activity android:name="shixiaofei.coolweather.love.shaonianAndxmv.activity.WeatherActivity"></activity>
 
-        <receiver android:name=".receiver.AutoUpdateReceiver"></receiver>
+        <receiver android:name="shixiaofei.coolweather.love.shaonianAndxmv.receiver.AutoUpdateReceiver"></receiver>
 
         <!--有米广告-->
         <activity
