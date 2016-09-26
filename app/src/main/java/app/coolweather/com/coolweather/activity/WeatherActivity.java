@@ -12,12 +12,16 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import net.youmi.android.banner.AdSize;
+import net.youmi.android.banner.AdView;
 
 import app.coolweather.com.coolweather.R;
 import app.coolweather.com.coolweather.service.AutoUpdateService;
 import app.coolweather.com.coolweather.util.HttpCallbackListener;
 import app.coolweather.com.coolweather.util.HttpUtil;
-        import app.coolweather.com.coolweather.util.Utility;
+import app.coolweather.com.coolweather.util.Utility;
+
+import static app.coolweather.com.coolweather.R.id.adLayout;
 
 /**
  * Created by shixiaofei on 2016/9/25.
@@ -39,6 +43,9 @@ public class WeatherActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.weather_layout);
 
         weatherInfoLayout = (LinearLayout)findViewById(R.id.weather_info_layout);
@@ -83,6 +90,13 @@ public class WeatherActivity extends Activity{
         }else{
             showWeather();
         }
+
+        /**
+         * 实例化广告位
+         */
+        AdView adView =  new AdView(this, AdSize.FIT_SCREEN);
+        LinearLayout adLayout = (LinearLayout)findViewById(R.id.adLayout);
+        adLayout.addView(adView);
     }
 
     /**
